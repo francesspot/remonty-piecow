@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { company } from '../data/company';
-import { aboutPhoto } from '../data/photos';
+import { aboutPhoto, aboutPhotoPosition } from '../data/photos';
 import { content, type Lang } from '../data/content';
 
 interface Props {
@@ -47,6 +47,7 @@ const t = content[lang];
             widths={[480, 800, 1200]}
             sizes="(min-width: 768px) 45vw, 100vw"
             class="relative aspect-4/3 w-full rounded-2xl object-cover shadow-xl md:aspect-4/5"
+            style={{ objectPosition: aboutPhotoPosition }}
           />
         </div>
       )

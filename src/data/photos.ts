@@ -71,6 +71,9 @@ const DEFAULT_DESCRIPTION: Record<Lang, string> = {
 // Te dwa zdjęcia nie są powtarzane w galerii.
 export const heroPhotoFile = '00-sklepiona-komora-pieca-przemyslowego.jpg';
 export const aboutPhotoFile = '00-murowanie-sklepienia-pieca.jpg';
+// Kadrowanie zdjęcia „O firmie” (object-position): na telefonie ramka jest pozioma, a zdjęcie pionowe,
+// więc bez przesunięcia w górę wycinany jest środek i ucina głowę. „50% 20%” = poziomo środek, pionowo bliżej góry.
+export const aboutPhotoPosition = '50% 20%';
 
 export type Photo = { file: string; src: ImageMetadata; description: Record<Lang, string> };
 
