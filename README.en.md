@@ -25,4 +25,3 @@ npm install
 npm run dev      # preview: http://localhost:4321
 npm run build    # output in dist/
 ```
-Deployment and domain setup (in Polish): [WDROZENIE.md](WDROZENIE.md).

@@ -25,4 +25,3 @@ npm install
 npm run dev      # podgląd: http://localhost:4321
 npm run build    # wynik w dist/
 ```
-Wdrożenie i konfiguracja domeny: [WDROZENIE.md](WDROZENIE.md).
