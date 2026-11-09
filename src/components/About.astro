@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import { company } from '../data/company';
+import { aboutPhoto } from '../data/photos';
+import { content, type Lang } from '../data/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = content[lang];
+---
+
+<section id="o-firmie" class="border-y border-stone-200 bg-white py-20 md:py-28" aria-labelledby="about-title">
+  <div class="mx-auto grid max-w-6xl items-center gap-12 px-5 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+    <div class="reveal">
+      <h2 id="about-title" class="text-3xl font-bold md:text-4xl">{t.about.title}</h2>
+      <div class="mt-6 space-y-4 text-lg text-stone-600">
+        {t.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+
+      <p class="mt-8 font-semibold">{t.about.brands}</p>
+      <ul class="mt-3 flex flex-wrap gap-2" aria-label={t.about.brandsLabel}>
+        {company.brands.map((brand) => <li class="rounded-full bg-ember-50 px-3.5 py-1.5 text-sm font-semibold text-ember-700">{brand}</li>)}
+      </ul>
+
+      <dl class="mt-10 grid grid-cols-2 gap-6 border-t border-stone-200 pt-8">
+        <div>
+          <dt class="text-sm text-stone-500">{t.about.experience}</dt>
+          <dd class="font-display text-4xl font-bold text-coal-900">{t.about.years}</dd>
+        </div>
+        <div>
+          <dt class="text-sm text-stone-500">{t.about.area}</dt>
+          <dd class="font-display text-4xl font-bold text-coal-900">{t.about.areaValue}</dd>
+        </div>
+      </dl>
+    </div>
+
+    {
+      aboutPhoto && (
+        <div class="reveal relative">
+          <div class="absolute -bottom-4 -right-4 -z-0 hidden h-full w-full rounded-2xl bg-ember-100 md:block" />
+          <Image
+            src={aboutPhoto.src}
+            alt={aboutPhoto.description[lang]}
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 768px) 45vw, 100vw"
+            class="relative aspect-4/3 w-full rounded-2xl object-cover shadow-xl md:aspect-4/5"
+          />
+        </div>
+      )
+    }
+  </div>
+</section>

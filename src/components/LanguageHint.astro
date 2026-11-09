@@ -1,0 +1,79 @@
+---
+import { content, langs, paths, type Lang } from '../data/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+// Warianty paska dla pozostałych języków; skrypt odkrywa co najwyżej jeden, zgodny z językiem przeglądarki.
+const others = langs.filter((l) => l !== lang);
+---
+
+{
+  others.map((l) => (
+    <aside
+      data-lang-hint={l}
+      lang={l}
+      hidden
+      aria-label={content[l].menu.language}
+      class="flex items-center justify-center gap-x-4 gap-y-1 bg-coal-950 py-2.5 pl-5 pr-12 text-sm text-stone-300 relative flex-wrap"
+    >
+      <span>{content[l].hint.text}</span>
+      <a href={paths[l]} hreflang={l} data-lang-choice class="font-semibold text-ember-300 underline hover:text-white">
+        {content[l].hint.link} →
+      </a>
+      <button
+        type="button"
+        data-hint-close
+        class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-xl leading-none text-stone-400 hover:text-white"
+        aria-label={content[l].hint.close}
+      >
+        ×
+      </button>
+    </aside>
+  ))
+}
+
+<script>
+  // Pasek pokazuje się tylko, gdy przeglądarka woli inny z obsługiwanych języków
+  // i odwiedzający nie wybrał jeszcze języka ani nie zamknął paska.
+  // Bez automatycznego przekierowania: Google je odradza, a część osób woli wersję polską.
+  const STORAGE_KEY = 'lang-chosen';
+
+  const wasChosen = () => {
+    try {
+      return localStorage.getItem(STORAGE_KEY) !== null;
+    } catch {
+      return false;
+    }
+  };
+  const rememberChoice = () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, '1');
+    } catch {
+      // Zablokowany localStorage (np. tryb prywatny): pasek pokaże się przy następnej wizycie.
+    }
+  };
+
+  const current = document.documentElement.lang;
+  const hintFor = (l: string) => document.querySelector<HTMLElement>(`[data-lang-hint="${l}"]`);
+  // Pierwszy z języków przeglądarki, który ma wersję strony – bieżącą albo z paskiem (np. „de-AT” → „de”).
+  const preferred = navigator.languages
+    .map((l) => l.slice(0, 2).toLowerCase())
+    .find((l) => l === current || hintFor(l));
+
+  if (!wasChosen() && preferred && preferred !== current) {
+    const hint = hintFor(preferred);
+    if (hint) {
+      hint.hidden = false;
+      hint.querySelector('[data-hint-close]')!.addEventListener('click', () => {
+        hint.hidden = true;
+        rememberChoice();
+      });
+    }
+  }
+
+  // Wybór języka w przełączniku lub w pasku też wyłącza podpowiedź na przyszłość.
+  document.querySelectorAll('[data-lang-choice]').forEach((a) => a.addEventListener('click', rememberChoice));
+</script>

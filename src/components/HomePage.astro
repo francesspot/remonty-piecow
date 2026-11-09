@@ -1,0 +1,31 @@
+---
+// Cała strona główna; ta sama dla każdego języka, różni się tylko tekstami.
+import Layout from '../layouts/Layout.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Services from './Services.astro';
+import About from './About.astro';
+import Gallery from './Gallery.astro';
+import Contact from './Contact.astro';
+import Footer from './Footer.astro';
+import type { Lang } from '../data/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<Layout lang={lang}>
+  <Header lang={lang} />
+  <!-- Odstęp na dole na telefonach, żeby przyklejony przycisk nie zasłaniał stopki -->
+  <main id="top" class="pb-20 md:pb-0">
+    <Hero lang={lang} />
+    <Services lang={lang} />
+    <About lang={lang} />
+    <Gallery lang={lang} />
+    <Contact lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>
