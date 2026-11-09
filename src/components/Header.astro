@@ -5,6 +5,7 @@ import LanguageHint from './LanguageHint.astro';
 import logo from '../assets/logo.png';
 import { company } from '../data/company';
 import { content, langs, paths, type Lang } from '../data/content';
+import { withBase } from '../utils/base';
 
 interface Props {
   lang: Lang;
@@ -60,7 +61,7 @@ const links = [
         {
           langs.map((l) => (
             <a
-              href={paths[l]}
+              href={withBase(paths[l])}
               hreflang={l}
               lang={l}
               data-lang-choice

@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { company } from '../data/company';
 import { content, langs, paths, type Lang } from '../data/content';
+import { isPreview, withBase } from '../utils/base';
 
 interface Props {
   lang?: Lang;
@@ -14,21 +15,22 @@ const { lang = 'pl', noindex = false } = Astro.props;
 const t = content[lang];
 const { title = t.seo.title, description = t.seo.description } = Astro.props;
 
-// Adresy bezwzględne na podstawie `site` z astro.config.mjs.
-const canonical = new URL(paths[lang], Astro.site);
-const ogImage = new URL('/og-image.png', Astro.site);
+// Adresy bezwzględne na podstawie `site` i `base` z astro.config.mjs.
+const absolute = (path: string) => new URL(withBase(path), Astro.site);
+const canonical = absolute(paths[lang]);
+const ogImage = absolute('/og-image.png');
 
 // Dane strukturalne schema.org: firma usługowa bez lokalu dla klientów, obsługująca cały kraj.
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  '@id': new URL('/#firma', Astro.site).href,
+  '@id': absolute('/#firma').href,
   name: `${company.name} – ${t.tagline}`,
-  url: Astro.site?.href,
+  url: absolute('/').href,
   telephone: company.phone,
   email: company.email,
   image: ogImage.href,
-  logo: new URL('/logo.png', Astro.site).href,
+  logo: absolute('/logo.png').href,
   description: t.seo.description,
   areaServed: { '@type': 'Country', name: t.area },
   knowsAbout: [...t.expertise, ...company.brands],
@@ -50,19 +52,19 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
+    <meta name="robots" content={noindex || isPreview ? 'noindex, follow' : 'index, follow'} />
     <meta name="theme-color" content="#1c1917" />
-    <link rel="icon" href="/favicon.png" type="image/png" sizes="48x48" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="sitemap" href="/sitemap.xml" />
+    <link rel="icon" href={withBase('/favicon.png')} type="image/png" sizes="48x48" />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+    <link rel="sitemap" href={withBase('/sitemap.xml')} />
 
     {
       !noindex && (
         <>
           <link rel="canonical" href={canonical} />
           <!-- Wersje językowe tej samej strony; x-default = wersja dla pozostałych języków -->
-          {langs.map((l) => <link rel="alternate" hreflang={l} href={new URL(paths[l], Astro.site)} />)}
-          <link rel="alternate" hreflang="x-default" href={new URL(paths.pl, Astro.site)} />
+          {langs.map((l) => <link rel="alternate" hreflang={l} href={absolute(paths[l])} />)}
+          <link rel="alternate" hreflang="x-default" href={absolute(paths.pl)} />
         </>
       )
     }

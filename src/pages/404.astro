@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { company } from '../data/company';
+import { withBase } from '../utils/base';
 ---
 
 <Layout title="Nie znaleziono strony | Jerzy Pora" noindex>
@@ -10,7 +11,7 @@ import { company } from '../data/company';
       <h1 class="mt-4 text-2xl font-bold">Nie ma takiej strony</h1>
       <p class="mt-2 text-stone-300">Adres mógł się zmienić.</p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <a href="/" class="rounded-lg bg-ember-600 px-5 py-3 font-semibold hover:bg-ember-700">Strona główna</a>
+        <a href={withBase('/')} class="rounded-lg bg-ember-600 px-5 py-3 font-semibold hover:bg-ember-700">Strona główna</a>
         <a href={`tel:${company.phone}`} class="rounded-lg border-2 border-white/50 px-5 py-2.5 font-semibold hover:bg-white/10">
           Zadzwoń: {company.phoneDisplay}
         </a>

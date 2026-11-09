@@ -1,10 +1,11 @@
 import type { APIRoute } from 'astro';
 import { langs, paths, type Lang } from '../data/content';
+import { withBase } from '../utils/base';
 
 // Mapa witryny: każda wersja językowa z odnośnikami do pozostałych (hreflang).
 // Bez <lastmod> – data buildu zmieniałaby się przy każdym wdrożeniu, nawet bez zmian w treści.
 export const GET: APIRoute = ({ site }) => {
-  const url = (lang: Lang) => new URL(paths[lang], site).href;
+  const url = (lang: Lang) => new URL(withBase(paths[lang]), site).href;
   const alternates = langs.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${url(l)}"/>`).join('\n');
   const urls = langs
     .map(
