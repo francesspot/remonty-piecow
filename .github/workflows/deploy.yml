@@ -26,12 +26,6 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run build
-        env:
-          # Podgląd pod adresem tymczasowym <login>.github.io/<repo> (z noindex).
-          # Po podpięciu domeny remontypiecow.pl w Settings → Pages usunąć oba wpisy.
-          SITE_URL: https://${{ github.repository_owner }}.github.io
-          BASE_PATH: /${{ github.event.repository.name }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
